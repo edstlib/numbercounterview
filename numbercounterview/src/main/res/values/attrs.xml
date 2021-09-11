@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="NumberCounterView">
+        <attr name="numberCounterValue" format="integer" />
+        <attr name="numberCounterMax" format="integer" />
+        <attr name="numberCounterMin" format="integer" />
+        <attr name="numberCounterStep" format="integer" />
+    </declare-styleable>
+</resources>
