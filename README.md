@@ -63,7 +63,6 @@ You can set a listener to be notified when user change value. An example is show
 ```kotlin
     binding.numberCounterView.delegate = object : NumberCounterDelegate {
         override fun onChangeValue(value: Int) {
-            TODO("Not yet implemented")
         }
     }
 ```

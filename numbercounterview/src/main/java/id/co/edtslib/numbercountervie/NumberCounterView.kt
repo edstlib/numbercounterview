@@ -103,7 +103,7 @@ class NumberCounterView: FrameLayout {
                 0
             } else {
                 val d = s.toInt()
-                return if (d+step < min) min else d-step
+                return if (d-step < min) min else d-step
             }
         } catch (e: NumberFormatException) {
             0
