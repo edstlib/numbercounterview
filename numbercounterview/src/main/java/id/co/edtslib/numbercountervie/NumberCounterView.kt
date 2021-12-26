@@ -73,6 +73,14 @@ class NumberCounterView: FrameLayout {
         editText?.setText(String.format("%d", value))
     }
 
+    fun setMaxValue(value: Int) {
+        max = value
+    }
+
+    fun setMinValue(value: Int) {
+        min = value
+    }
+
     private fun getValue(): Int {
         return try {
             val s = editText?.text?.toString()
