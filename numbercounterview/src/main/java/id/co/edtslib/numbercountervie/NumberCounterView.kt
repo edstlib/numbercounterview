@@ -13,6 +13,7 @@ class NumberCounterView: FrameLayout {
     private var min = 0
     private var max = Int.MAX_VALUE
     private var step = 1
+    private var lastValue = -1
     var delegate: NumberCounterDelegate? = null
 
     constructor(context: Context) : super(context) {
@@ -34,7 +35,16 @@ class NumberCounterView: FrameLayout {
 
         editText = view.findViewById(R.id.editText)
         editText?.addTextChangedListener {
-            delegate?.onChangeValue(getValue())
+            var value = getValue()
+            if (value > max) {
+                value = lastValue
+                editText?.setText(String.format("%d", value))
+            }
+            else {
+                lastValue = value
+            }
+
+            delegate?.onChangeValue(value)
         }
 
         view.findViewById<View>(R.id.tvAdd).setOnClickListener {
