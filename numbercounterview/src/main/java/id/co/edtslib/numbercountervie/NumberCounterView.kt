@@ -35,16 +35,25 @@ class NumberCounterView: FrameLayout {
 
         editText = view.findViewById(R.id.editText)
         editText?.addTextChangedListener {
-            var value = getValue()
-            if (value > max) {
-                value = lastValue
-                editText?.setText(String.format("%d", value))
+            val s = it.toString()
+            if (s.isEmpty()) {
+                editText?.setText(String.format("%d", min))
+            }
+            else
+            if (s.length > 1 && s.startsWith("0")) {
+                editText?.setText(it.toString().trimStart('0'))
             }
             else {
-                lastValue = value
-            }
+                var value = getValue()
+                if (value > max) {
+                    value = lastValue
+                    editText?.setText(String.format("%d", value))
+                } else {
+                    lastValue = value
+                }
 
-            delegate?.onChangeValue(value)
+                delegate?.onChangeValue(value)
+            }
         }
 
         view.findViewById<View>(R.id.tvAdd).setOnClickListener {
