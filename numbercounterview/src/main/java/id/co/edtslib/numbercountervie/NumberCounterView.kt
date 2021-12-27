@@ -36,10 +36,6 @@ class NumberCounterView: FrameLayout {
         editText = view.findViewById(R.id.editText)
         editText?.addTextChangedListener {
             val s = it.toString()
-            if (s.isEmpty()) {
-                editText?.setText(String.format("%d", min))
-            }
-            else
             if (s.length > 1 && s.startsWith("0")) {
                 editText?.setText(it.toString().trimStart('0'))
             }
@@ -53,6 +49,11 @@ class NumberCounterView: FrameLayout {
                 }
 
                 delegate?.onChangeValue(value)
+            }
+        }
+        editText?.setOnFocusChangeListener { _, _ ->
+            if (editText!!.text.toString().isEmpty()) {
+                editText?.setText(String.format("%d", min))
             }
         }
 
