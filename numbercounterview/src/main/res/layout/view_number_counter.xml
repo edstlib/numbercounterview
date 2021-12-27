@@ -27,7 +27,7 @@
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:background="#DCDEE3"/>
-        <androidx.appcompat.widget.AppCompatEditText
+        <id.co.edtslib.numbercountervie.NumberEditText
             android:id="@+id/editText"
             android:background="@null"
             android:inputType="number"
