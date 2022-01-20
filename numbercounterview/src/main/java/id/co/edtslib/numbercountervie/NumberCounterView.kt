@@ -153,6 +153,7 @@ class NumberCounterView: FrameLayout {
                 if (d1 <= max && d != d1) {
                     removeEditTextListener()
                     editText?.setText(String.format("%d", d1))
+                    delegate?.onChangeValue(d1)
                     setEditTextListener()
                 }
             }
@@ -170,6 +171,7 @@ class NumberCounterView: FrameLayout {
                 if (d1 >= min && d != d1) {
                     removeEditTextListener()
                     editText?.setText(String.format("%d", d1))
+                    delegate?.onChangeValue(d1)
                     setEditTextListener()
                 }
             }
