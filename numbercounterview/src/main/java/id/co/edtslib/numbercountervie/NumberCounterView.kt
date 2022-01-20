@@ -1,11 +1,12 @@
 package id.co.edtslib.numbercountervie
 
 import android.content.Context
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.AttributeSet
 import android.view.View
 import android.widget.EditText
 import android.widget.FrameLayout
-import androidx.core.widget.addTextChangedListener
 import java.lang.NumberFormatException
 
 class NumberCounterView: FrameLayout {
@@ -15,6 +16,7 @@ class NumberCounterView: FrameLayout {
     private var step = 1
     private var lastValue = -1
     var delegate: NumberCounterDelegate? = null
+    private var textWatcher: TextWatcher? = null
 
     constructor(context: Context) : super(context) {
         init(null)
@@ -34,23 +36,8 @@ class NumberCounterView: FrameLayout {
         val view = inflate(context, R.layout.view_number_counter, this)
 
         editText = view.findViewById(R.id.editText)
-        editText?.addTextChangedListener {
-            val s = it.toString()
-            if (s.length > 1 && s.startsWith("0")) {
-                editText?.setText(it.toString().trimStart('0'))
-            }
-            else {
-                var value = getValue()
-                if (value > max) {
-                    value = lastValue
-                    editText?.setText(String.format("%d", value))
-                } else {
-                    lastValue = value
-                }
+        setEditTextListener()
 
-                delegate?.onChangeValue(value)
-            }
-        }
         editText?.setOnFocusChangeListener { _, _ ->
             if (editText!!.text.toString().isEmpty()) {
                 editText?.setText(String.format("%d", min))
@@ -58,11 +45,10 @@ class NumberCounterView: FrameLayout {
         }
 
         view.findViewById<View>(R.id.tvAdd).setOnClickListener {
-            editText?.setText(String.format("%d", add()))
-
+            add()
         }
         view.findViewById<View>(R.id.tvMinus).setOnClickListener {
-            editText?.setText(String.format("%d", minus()))
+            minus()
         }
 
         if (attrs != null) {
@@ -88,6 +74,45 @@ class NumberCounterView: FrameLayout {
         }
 
     }
+
+    private fun removeEditTextListener() {
+        if (textWatcher != null) {
+            editText?.removeTextChangedListener(textWatcher)
+        }
+    }
+
+    private fun setEditTextListener() {
+        textWatcher = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                if (s != null) {
+                    if (s.length > 1 && s.startsWith("0")) {
+                        editText?.setText(s.toString().trimStart('0'))
+                    } else {
+                        var value = getValue()
+                        if (value > max && value > lastValue) {
+                            value = lastValue
+
+                            removeEditTextListener()
+                            editText?.setText(String.format("%d", value))
+                            setEditTextListener()
+                        } else {
+                            lastValue = value
+                        }
+
+                        delegate?.onChangeValue(value)
+                    }
+                }
+            }
+        }
+
+        editText?.addTextChangedListener(textWatcher)
+    }
     
     fun setValue(value: Int) {
         editText?.setText(String.format("%d", value))
@@ -95,6 +120,15 @@ class NumberCounterView: FrameLayout {
 
     fun setMaxValue(value: Int) {
         max = value
+    }
+
+    fun setMaxValue(value: Int, force: Boolean) {
+        if (force) {
+            editText?.removeTextChangedListener(textWatcher)
+        }
+        max = value
+
+        setEditTextListener()
     }
 
     fun setMinValue(value: Int) {
@@ -110,31 +144,37 @@ class NumberCounterView: FrameLayout {
         }
     }
 
-    private fun add(): Int {
-        return try {
+    private fun add() {
+        try {
             val s = editText?.text?.toString()
-            if (s == null) {
-                0
-            } else {
+            if (s != null) {
                 val d = s.toInt()
-                return if (d+step > max) max else d+step
+                val d1 = d+step
+                if (d1 <= max && d != d1) {
+                    removeEditTextListener()
+                    editText?.setText(String.format("%d", d1))
+                    setEditTextListener()
+                }
             }
-        } catch (e: NumberFormatException) {
-            0
+        } catch (ignored: NumberFormatException) {
+
         }
     }
 
-    private fun minus(): Int {
-        return try {
+    private fun minus() {
+        try {
             val s = editText?.text?.toString()
-            if (s == null) {
-                0
-            } else {
+            if (s != null) {
                 val d = s.toInt()
-                return if (d-step < min) min else d-step
+                val d1  = d - step
+                if (d1 >= min && d != d1) {
+                    removeEditTextListener()
+                    editText?.setText(String.format("%d", d1))
+                    setEditTextListener()
+                }
             }
-        } catch (e: NumberFormatException) {
-            0
+        } catch (ignored: NumberFormatException) {
+
         }
     }
 }
