@@ -81,7 +81,7 @@ class NumberCounterView: FrameLayout {
         }
     }
 
-    fun setEditTextListener() {
+    fun setEditTextListener() { 
         textWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
