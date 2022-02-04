@@ -75,13 +75,15 @@ class NumberCounterView: FrameLayout {
 
     }
 
+    fun getEditText() = editText
+
     fun removeEditTextListener() {
         if (textWatcher != null) {
             editText?.removeTextChangedListener(textWatcher)
         }
     }
 
-    fun setEditTextListener() { 
+    fun setEditTextListener() {
         textWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
