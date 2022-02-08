@@ -93,7 +93,7 @@ class NumberCounterView: FrameLayout {
 
             override fun afterTextChanged(s: Editable?) {
                 if (s != null) {
-                    if (s.length > 1 && s.startsWith("0")) {
+                    if (s.startsWith("0")) {
                         editText?.setText(s.toString().trimStart('0'))
                     } else {
                         var value = getValue()
@@ -140,9 +140,9 @@ class NumberCounterView: FrameLayout {
     private fun getValue(): Int {
         return try {
             val s = editText?.text?.toString()
-            return s?.toInt() ?: 0
+            return s?.toInt() ?: min
         } catch (e: NumberFormatException) {
-            0
+            min
         }
     }
 

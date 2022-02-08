@@ -10,7 +10,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val numberCounterView = findViewById<NumberCounterView>(R.id.numberCounterView)
-        numberCounterView.setValue(46)
-        numberCounterView.setMaxValue(2)
+        numberCounterView.setValue(1)
     }
 }
