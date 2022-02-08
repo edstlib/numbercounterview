@@ -94,7 +94,17 @@ class NumberCounterView: FrameLayout {
             override fun afterTextChanged(s: Editable?) {
                 if (s != null) {
                     if (s.startsWith("0")) {
-                        editText?.setText(s.toString().trimStart('0'))
+                        if (s.length > 1) {
+                            editText?.setText(s.toString().trimStart('0'))
+                        }
+                        else
+                        if (min > 0) {
+                            removeEditTextListener()
+                            editText?.setText(String.format("%d", min))
+                            setEditTextListener()
+                        }
+
+                        delegate?.onChangeValue(min)
                     } else {
                         var value = getValue()
                         if (value > max && value > lastValue) {
